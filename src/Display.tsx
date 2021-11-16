@@ -1,21 +1,30 @@
+import React from 'react';
+
 type PropsType = {
+    startNum: number
+    maxNum: number
     counterNum: number
-    stateStartNum?: number
-    stateMaxNum?: number
-    inputStartValue?: number
-    inputMaxValue?: number
-    checkError: boolean
+    inputMaxValue: number
+    inputStartValue: number
+    setError: (value: boolean) => void
+    error: boolean
+    setIncorrectValue: (value: boolean) => void
+    incorrectValue: boolean
 }
 
 
 export const Display = (props: PropsType) => {
+    if (props.startNum !== props.inputStartValue || props.maxNum !== props.inputMaxValue) {
+        props.setError(true)
+    }
+    if (props.startNum < 0 || props.maxNum < 0 || props.startNum === props.maxNum || props.startNum > props.maxNum) {
+        props.setIncorrectValue(true)
+    } else props.setIncorrectValue(false)
     return (
-        <div className={!props.checkError ? 'IncorrectValue' : 'Display'}>
-
-            {/*{props.stateStartNum === props.inputStartValue && props.stateMaxNum === props.inputMaxValue ? props.counterNum : 'incorrect value' }*/}
-            {!props.checkError ? "enter values and press 'set' ": props.counterNum}
-
-
+        <div className={props.counterNum === props.inputMaxValue ? 'DisplayIncorrect' : 'Display'}>
+            {props.incorrectValue ? <div className={'setDisplayError'}>Incorrect value!</div> :
+                props.error ? <div className={'setDisplayError'}>enter values end press 'set'</div> :
+                    props.counterNum}
         </div>
     )
 }

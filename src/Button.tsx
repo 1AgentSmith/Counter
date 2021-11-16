@@ -2,7 +2,7 @@ import React from 'react'
 
 
 export type PropsTypeButton = {
-    buttonTitle: string
+    title: string
     disabled?: boolean
     onClickHandler: () => void
 }
@@ -10,7 +10,7 @@ export type PropsTypeButton = {
 export function Button(props: PropsTypeButton) {
     return (
         <div>
-            <button onClick={props.onClickHandler} disabled={props.disabled}>{props.buttonTitle}</button>
+            <button onClick={props.onClickHandler} disabled={props.disabled}>{props.title}</button>
         </div>
     )
 }
