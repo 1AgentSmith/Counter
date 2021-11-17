@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {Display} from './Display';
 import {Animation} from './Animation';
@@ -16,7 +16,32 @@ function App() {
     let [startNum, setStartNum] = useState(0)
     let [maxNum, setMaxNum] = useState(0)
     let [error, setError] = useState(false)
+    let [isDisabled, setIsDisabled] = useState(false)
     let [incorrectValueError, setIncorrectValueError] = useState(false)
+
+    useEffect(()=> {
+        let valueMaxNum = localStorage.getItem('Max value')
+        if(valueMaxNum) {
+            let newValueMaxNum = JSON.parse(valueMaxNum)
+            setMaxNum(newValueMaxNum)
+        }
+    }, [])
+    useEffect(()=> {
+        let valueStartNum = localStorage.getItem('Start value')
+        if(valueStartNum) {
+            let newValueStartNum = JSON.parse(valueStartNum)
+            setStartNum(newValueStartNum)
+        }
+    }, [])
+    useEffect(() => {
+            setIsDisabled(false)
+        }, [startNum, maxNum])
+    useEffect(()=> {
+        localStorage.setItem('Max value', JSON.stringify(maxNum))
+    }, [maxNum])
+    useEffect(()=> {
+        localStorage.setItem('Start value', JSON.stringify(startNum))
+    }, [startNum])
 
     const increaseNum = () => {
         if (counterNum < counter.maxValue) {
@@ -35,6 +60,7 @@ function App() {
     }
     const onConfirmClickHandler = () => {
         confirmValues(startNum, maxNum)
+        setIsDisabled(true);
     }
 
     return (
@@ -59,7 +85,8 @@ function App() {
             />
             <Button
                 title={'Set'}
-                disabled={incorrectValueError || counter.startValue === startNum && counter.maxValue === maxNum}
+                // disabled={incorrectValueError || counter.startValue === startNum && counter.maxValue === maxNum}
+                disabled={isDisabled || incorrectValueError}
                 onClickHandler={onConfirmClickHandler}
             />
             <Button
